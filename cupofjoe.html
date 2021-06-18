@@ -17,6 +17,20 @@
 
 
     <style>
+        @media only screen and (max-width: 749px){
+        .chikeHideOnMobile {
+            display: none !important;
+            visibility: hidden;
+        }
+        }
+
+        /*  - CSS class inteded to only reveal elements when in mobile view*/
+        @media only screen and (min-width: 749px){
+        .chikeRevealOnMobile {
+            display: none !important;
+            visibility: hidden;
+        }
+        }
         body{
             font-family: 'Raleway', sans-serif;
             margin: 0px;
@@ -37,7 +51,7 @@
         }
         .lilSharpBox{
             background-color: #93c719;
-            
+            border-radius: 15px;
             width: 20vw;
             height: 20vw;
             
@@ -55,13 +69,81 @@
         }
 
     </style>
+    <script>
 
+        const animateCSS = (element, animation, prefix = 'animate__') =>
+        // We create a Promise and return it
+        new Promise((resolve, reject) => {
+            const animationName = `${prefix}${animation}`;
+            const node = document.querySelector(element);
+
+            node.classList.add(`${prefix}animated`, animationName);
+
+            // When the animation ends, we clean the classes and resolve the Promise
+            function handleAnimationEnd(event) {
+            event.stopPropagation();
+            node.classList.remove(`${prefix}animated`, animationName);
+            resolve('Animation ended');
+            }
+
+            node.addEventListener('animationend', handleAnimationEnd, {once: true});
+        });
+
+        $( document ).ready(function() {
+            var $animation_elements = $(".animate-me-please");
+            var $window = $(window);
+
+            $window.on('scroll', check_if_in_view);
+            $window.on('scroll resize', check_if_in_view);
+
+            $window.trigger('scroll');
+
+            function check_if_in_view() {
+                var window_height = $window.height();
+                var window_top_position = $window.scrollTop();
+                var window_bottom_position = (window_top_position + window_height);
+
+                $.each($animation_elements, function() {
+                    var $element = $(this);
+                    var element_height = $element.outerHeight();
+                    var element_top_position = $element.offset().top;
+                    var element_bottom_position = (element_top_position + element_height);
+
+                    //check to see if this current container is within viewport
+                    if ((element_bottom_position >= window_top_position) && (element_top_position <= window_bottom_position)){
+                        if($element.hasClass("animate-me-fadeIn")){
+                            animateCSS('.animate-me-fadeIn', 'fadeIn');
+                            $element.removeClass('animate-me-fadeIn');
+                        }
+                        if($element.hasClass("animate-me-slideInDown")){
+                            animateCSS('.animate-me-slideInDown', 'slideInDown');
+                            $element.removeClass('animate-me-slideInDown');
+                        }
+                        if($element.hasClass("animate-me-fadeInLeft")){
+                            animateCSS('.animate-me-fadeInLeft', 'fadeInLeft');
+                            $element.removeClass('animate-me-fadeInLeft');
+                        }
+                        if($element.hasClass("animate-me-fadeInRight")){
+                            animateCSS('.animate-me-fadeInRight', 'fadeInRight');
+                            $element.removeClass('animate-me-fadeInRight');
+                        }
+                        if($element.hasClass("animate-me-fadeInUp")){
+                            animateCSS('.animate-me-fadeInUp', 'fadeInUp');
+                            $element.removeClass('animate-me-fadeInUp');
+                        }
+                    } else {
+                    $element.removeClass('animate-me-please');
+                    }
+                });
+            }
+        });
+    </script>
 
     <div class="bootstrap-isolated">
         <div class="container-fluid pb-5">
             <!-- Not you average cup of JOE -->
             <div class="row my-5" style="margin-left: 2em; margin-right: 2em; height: auto;">
-                <div class="col-md-4 col-s-4 pb-sm-5 pb-lg-0 text-start text-center" style="margin: auto; width: auto;">
+                <div class="animate-me-please animate-me-fadeIn col-md-4 col-s-4 pb-sm-5 pb-lg-0 text-start text-center" style="margin: auto; width: auto;">
                     <div class="py-5" style="display: inline-block; text-align: left;">
                         <b>
                             <h1 style="color: #484848; font-weight: 700; font-size: 3.5em;">NOT YOUR <br> AVERAGE <br></h1>
@@ -69,18 +151,21 @@
                         </b> 
                     </div>
                 </div>
-                <div class="col-md-8 col-s-8 text-end" style="margin: auto; width: 45em; height: auto;">
+                <div class="chikeHideOnMobile animate-me-please animate-me-fadeInRight col-md-8 col-s-8 text-end" style="margin: auto; width: 45em; height: auto;">
                     <img class="img-fluid pngDropShadow" src="assets/chart.png" style="max-width: 100%; height: auto;">
+                </div>
+                <div class="chikeRevealOnMobile animate-me-please animate-me-fadeInRight col-md-8 col-s-8 text-end px-3" style="margin: auto; width: 45em; height: auto;">
+                    <img class="img-fluid pngDropShadow" src="assets/CoffeeChart-Mobile-02.png" style="max-width: 100%; height: auto;">
                 </div>
             </div>
         </div>
 
         <div class="container-fluid p-0">
-            <div class="row" style="background-color: black; background-image: url(assets/chikeCoffeBackground.png); background-size: cover; background-repeat: no-repeat; width: auto; height: 100vh; margin: auto;">
+            <div class="animate-me-please animate-me-fadeIn row" style="background-color: black; background-image: url(assets/chikeCoffeBackground.png); background-size: cover; background-repeat: no-repeat; width: auto; height: 100vh; margin: auto;">
                 <div class="col-sm-12 p-md-5 text-center" style="margin: auto;">
                     <h1 class="pb-5" style="color: white; font-weight: 700; font-size: 5vmax;">JUST ADD WATER</h1>
                     <div class="row pt-md-5 px-lg-5" style="width: 100%; margin: auto;">
-                        <div class="col-12 lilBox basicShadow p-lg-5 p-sm-3 centerimage" style="width: 20vw; height: 20vw;"> 
+                        <div class="col-sm-12 col-lg-4 lilBox basicShadow p-lg-5 p-sm-0 centerimage" style="margin: auto; width: 22vw; height: 22vw;"> 
                             <!-- water -->
                             <div style="margin: auto; width: 100%; text-align: center;">
                                 <img src="assets/10oz-Icon.png" alt="" class="p-0 p-lg-0 img-fluid" style="width: 7vw;">
@@ -88,9 +173,9 @@
                             <h3 class="p-1" style="font-weight: 700; font-size: 2vw;">OF WATER</h3>
                         </div>
 
-                        <div class="col" style="margin: auto;"><h1 style="font-weight: 700; font-size: 5vmax; color: #93c719;">+</h1></div>
+                        <div class="col-12 col-lg-1" style="margin: auto;"><h1 style="font-weight: 700; font-size: 5vmax; color: #93c719;">+</h1></div>
 
-                        <div class="col-12 lilBox basicShadow p-lg-5 p-sm-3 centerimage" style="width: 20vw; height: 20vw;"> 
+                        <div class="col-sm-12 col-lg-4 lilBox basicShadow p-lg-5 p-sm-0 centerimage" style="margin: auto; width: 22vw; height: 22vw;"> 
                             <!-- Scoop -->
                             <div style="margin: auto; width: 100%; text-align: center;">
                                 <img src="assets/ScoopIcon.png" alt="" class="p-0 p-lg-3 img-fluid" style="width: 11vw;">
@@ -98,9 +183,9 @@
                             <h3 class="p-1" style="font-weight: 700; font-size: 2vw; width: 100%;">TWO SCOOPS</h3>
                         </div>
 
-                        <div class="col align-middle" style="margin: auto;"><h1 style="font-weight: 700; font-size: 5vmax; color: #93c719;">=</h1></div>
+                        <div class="col-12 col-lg-1 align-middle" style="margin: auto;"><h1 style="font-weight: 700; font-size: 5vmax; color: #93c719;">=</h1></div>
                         
-                        <div class="col-12 lilSharpBox basicShadow p-lg-5 p-sm-3 centerimage" style="width: 20vw; height: 20vw;"> 
+                        <div class="col-sm-12 col-lg-4 lilSharpBox basicShadow p-lg-5 p-sm-0 centerimage" style="margin: auto; width: 22vw; height: 22vw;"> 
                             <!-- Bottle -->
                             <div style="margin: auto; width: 100%; height: auto; text-align: center;">
                                 <img src="assets/CoffeeBlender-Icon.png" alt="" class="p-1 p-lg-3 img-fluid" style="width: 6vw;">
